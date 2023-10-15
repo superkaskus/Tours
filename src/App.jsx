@@ -10,7 +10,14 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [tours, setTours] = useState([])
 
- // fetching data from url using useEffect
+  // filter tours
+
+  const removeTour = (id) => {
+    const newTours = tours.filter((tour) => tour.id !== id )
+    setTours(newTours)
+  }
+
+ // A function to fetch data from url using
   const fetchTours = async () => {
     setIsLoading(true)
     try {
@@ -22,7 +29,7 @@ const App = () => {
     }
     setIsLoading(false)
   }
-  
+// using useEffect to to trigger data fetch.
   useEffect(()=>{
       fetchTours()
   },[])
@@ -35,10 +42,24 @@ const App = () => {
       </main>
     )
   }
+
+  // A condition to display Empty list if no data available 
+  //set refresh button to refetch data
+
+  if (tours.length === 0 ){
+    return (
+      <main>
+        <h2>No more Tours left</h2>
+        <button type="button" className="btn" 
+        onClick={()=>{fetchTours()}} style={{marginTop: '2rem'}}
+        >Refresh</button>
+      </main>
+    )
+  }
   // render the component when tours data is fetched.
   return (
   <main>
-    <Tours tours = {tours} />
+    <Tours tours = {tours} removeTour ={removeTour} />
    </main>
   )
 };
